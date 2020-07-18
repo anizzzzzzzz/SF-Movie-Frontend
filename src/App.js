@@ -1,10 +1,14 @@
 import React from 'react';
 import './App.css';
-import MapLayout from "./component/MapLayout";
+import MapLayout from "./component/map/MapLayout";
+import FilterData from "./component/filter/FilterData";
 
 function App() {
   return (
-    <MapLayout/>
+      <div className="main-div">
+        <FilterData/>
+        <MapLayout/>
+      </div>
   );
 }
 

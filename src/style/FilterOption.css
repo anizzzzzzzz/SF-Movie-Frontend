@@ -11,8 +11,11 @@
     opacity: 0.9;
 }
 
-.filter-option input{
+.filter-option input, .filter-option .ant-select{
     width: 350px;
+}
+.filter-option .ant-select-selector{
+    height: 100% !important;
 }
 .filter-option button{
     width: 150px;
@@ -20,7 +23,7 @@
 }
 
 @media (max-width: 980px) {
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 310px;
     }
     .filter-option button{
@@ -29,7 +32,7 @@
 }
 
 @media (max-width: 800px) {
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 270px;
     }
     .filter-option button{
@@ -37,7 +40,7 @@
     }
 }
 @media (max-width: 700px) {
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 200px;
     }
     .filter-option button{
@@ -45,7 +48,7 @@
     }
 }
 @media (max-width: 550px) {
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 140px;
     }
     .filter-option button{
@@ -53,7 +56,7 @@
     }
 }
 @media (max-width: 430px) {
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 100px;
     }
     .filter-option button{
@@ -65,7 +68,7 @@
         width: 90%;
         left: 10%;
     }
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 70px;
     }
     .filter-option button{
@@ -78,7 +81,7 @@
         width: 85%;
         left: 15%;
     }
-    .filter-option input{
+    .filter-option input, .filter-option .ant-select{
         width: 50px;
     }
     .filter-option button{

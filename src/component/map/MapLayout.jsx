@@ -1,16 +1,14 @@
 import React, {Component} from 'react';
 import 'ol/ol.css';
 import {Feature, Map, View} from 'ol';
-import {Style, Icon} from 'ol/style';
+import {Icon, Style} from 'ol/style';
 import {fromLonLat} from 'ol/proj';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import '../style/MapLayout.css';
-import FilterOption from "./FilterOption";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Point from "ol/geom/Point";
-import imageLogo from '../images/marker_32.ico'
+import imageLogo from '../../images/marker_32.ico'
 
 const data = [
     {name:"Epic Roasthouse (399 Embarcadero)", lat:37.7907487, long:-122.3893537},
@@ -81,10 +79,11 @@ class MapLayout extends Component {
 
     render() {
         return (
-            <div className="parent-div">
-                <FilterOption/>
+            <div className="map-area" id="map-div"> </div>
+            /*<div className="parent-div">
+                <FilterData/>
                 <div className="child-div" id="map-div"> </div>
-            </div>
+            </div>*/
         )
     }
 }
