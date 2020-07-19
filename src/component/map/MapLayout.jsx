@@ -9,6 +9,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Point from "ol/geom/Point";
 import imageLogo from '../../images/marker_32.ico'
+import {connect} from "react-redux";
 
 const data = [
     {name:"Epic Roasthouse (399 Embarcadero)", lat:37.7907487, long:-122.3893537},
@@ -17,8 +18,18 @@ const data = [
 ];
 class MapLayout extends Component {
     componentDidMount() {
-        let longitude = -122.431297, latitude = 37.773972;
-        let sanfrancisco  = fromLonLat([longitude, latitude]);
+        this.createMap();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // this.fetchMapCoordites();
+        let movieData = this.props.movieDatas;
+        console.log(movieData);
+    }
+
+    createMap = () => {
+        let lon = -122.431297, lat = 37.773972;
+        let sanfrancisco  = fromLonLat([lon, lat]);
         this.map = new Map({
             target: 'map-div',
             layers: [
@@ -33,8 +44,7 @@ class MapLayout extends Component {
         });
 
         data.forEach(d => this.addMarker(d.long, d.lat));
-        // this.addMarker(longitude, latitude);
-    }
+    };
 
     addMarker = (long, lat) => {
         let sanfrancisco  = fromLonLat([long, lat]);
@@ -75,17 +85,18 @@ class MapLayout extends Component {
         this.map.addLayer(vectorLayer);
     };
 
-
-
     render() {
+        // console.log("Props Data : ",this.props.movieDatas);
         return (
             <div className="map-area" id="map-div"> </div>
-            /*<div className="parent-div">
-                <FilterData/>
-                <div className="child-div" id="map-div"> </div>
-            </div>*/
         )
     }
 }
 
-export default MapLayout
+let mapStateToProps = (state) => {
+    return {
+        movieDatas : state.loadMovieData
+    }
+};
+
+export default connect(mapStateToProps)(MapLayout);

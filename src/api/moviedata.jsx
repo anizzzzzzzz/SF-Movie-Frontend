@@ -1,7 +1,7 @@
 import ROOT_API from "../config/appConfig";
 
-export function filterMovieData(query) {
-    return fetch(ROOT_API + "/sf-movie/filter", {
+export function autocomplete(query) {
+    return fetch(ROOT_API + '/sf-movie/autocomplete', {
         method : 'POST',
         headers: {
             'Accept' : 'application/json',
