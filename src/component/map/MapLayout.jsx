@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import 'ol/ol.css';
-import {Feature, Map, View} from 'ol';
+import {Feature, Map, Overlay, View} from 'ol';
 import {Icon, Style} from 'ol/style';
 import {fromLonLat} from 'ol/proj';
 import TileLayer from 'ol/layer/Tile';
@@ -8,28 +8,33 @@ import OSM from 'ol/source/OSM';
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Point from "ol/geom/Point";
-import imageLogo from '../../images/marker_32.ico'
 import {connect} from "react-redux";
+import '../../style/MapLayout.css';
+import markerImage from '../../images/marker.png';
 
-const data = [
-    {name:"Epic Roasthouse (399 Embarcadero)", lat:37.7907487, long:-122.3893537},
-    {name:"Mason & California Streets (Nob Hill)", lat:37.7932622, long:-122.415249},
-    {name:"Rainforest Café (145 Jefferson Street)", lat:37.8081859, long:-122.4148792},
-];
 class MapLayout extends Component {
+    constructor() {
+        super();
+        this.vectorLayers = [];
+        this.popupRef = React.createRef();
+        this.popupContent = React.createRef();
+    }
     componentDidMount() {
         this.createMap();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        // this.fetchMapCoordites();
-        let movieData = this.props.movieDatas;
-        console.log(movieData);
+        this.refreshMarkers();
     }
 
+    /* Initializing the Open Layer Map with San Francisco as the center. */
     createMap = () => {
         let lon = -122.431297, lat = 37.773972;
         let sanfrancisco  = fromLonLat([lon, lat]);
+        let center = new View({
+            center: sanfrancisco,
+            zoom: 12
+        });
         this.map = new Map({
             target: 'map-div',
             layers: [
@@ -37,30 +42,51 @@ class MapLayout extends Component {
                     source: new OSM()
                 })
             ],
-            view: new View({
-                center: sanfrancisco,
-                zoom: 13
-            })
+            view: center
         });
-
-        data.forEach(d => this.addMarker(d.long, d.lat));
+        this.createPopup();
     };
 
-    addMarker = (long, lat) => {
-        let sanfrancisco  = fromLonLat([long, lat]);
+    /* Refreshing the markers. This method will be called each time when user updates the filter parameters. */
+    refreshMarkers = () => {
+        /* Removing the previous marker layer from open layer. */
+        this.vectorLayers.forEach(layer =>{
+            this.map.removeLayer(layer);
+        });
+        this.vectorLayers = [];
+
+        /* New Movie Data for plotting the marker on map. */
+        let movieData = this.props.movieDatas;
+        movieData.forEach(data => this.addMarker(parseFloat(data.longitude),
+            parseFloat(data.latitude), this.getDescription(data)));
+    };
+
+    /* Popup Content in proper format. */
+    getDescription = (data) => {
+        let description =  Object.keys(data).map(key =>{
+            if(key !== 'id' && key !== 'latitude' && key !== 'longitude' && key !== 'funFacts'){
+                if(data[key] !== '')
+                    return '<b>' + key.substr(0,1).toUpperCase() + key.substring(1) + '</b> : ' + data[key] + '<br/>';
+            }
+            return '';
+        });
+        return description.join('');
+    };
+
+    /* Pinning the new Marker based on provided coordinates. */
+    addMarker = (long, lat, description) => {
+        let locationCoordinates  = fromLonLat([long, lat]);
 
         let iconFeature = new Feature({
-            geometry: new Point(sanfrancisco),
-            name: 'Null Island',
+            geometry: new Point(locationCoordinates),
+            type: 'click',
+            desc: description,
         });
-        var iconStyle = new Style({
+        let iconStyle = new Style({
             image: new Icon({
-                anchor: [0.5, 46],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                // src: 'data/icon.png',
-                src: imageLogo,
-                scale:1.5
+                src: markerImage,
+                // src: 'https://raw.githubusercontent.com/jonataswalker/map-utils/master/images/marker.png',
+                scale:0.7
             })
         });
         iconFeature.setStyle(iconStyle);
@@ -70,25 +96,46 @@ class MapLayout extends Component {
                 features: [iconFeature]
             })
         });
-
-        /*let layer = new VectorLayer({
-            source: new VectorSource({
-                features: [
-                    new Feature({
-                        geometry: new Point(sanfrancisco),
-                        name: 'San Fracisco',
-                    })
-                ]
-            })
-        });*/
-        // return vectorLayer;
+        this.vectorLayers.push(vectorLayer);
         this.map.addLayer(vectorLayer);
     };
 
+    /* Popup Configuration. Will display popup when user hovers over the markers. */
+    createPopup = () => {
+        let popup = new Overlay({
+            element: this.popupRef.current,
+            positioning: 'center-center',
+            stopEvent: false,
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250
+            }
+        });
+        this.map.addOverlay(popup);
+
+        /* Add a pointermove handler to the map to render the popup.*/
+        this.map.on('pointermove', (evt) => {
+            let feature = this.map.forEachFeatureAtPixel(evt.pixel, (feat, layer) => {return feat;});
+            if(feature){
+                let coordinates = feature.values_.geometry.flatCoordinates;
+                let content = this.popupContent.current;
+                content.innerHTML = feature.values_.desc;
+                popup.setPosition(coordinates);
+            }
+            else {
+                popup.setPosition(undefined);
+            }
+        });
+    };
+
     render() {
-        // console.log("Props Data : ",this.props.movieDatas);
         return (
-            <div className="map-area" id="map-div"> </div>
+            <>
+                <div className="map-area" id="map-div"> </div>
+                <div id = "popup" ref={this.popupRef} className = "ol-popup" >
+                    <div id="popup-content" ref={this.popupContent}/>
+                </div>
+            </>
         )
     }
 }
