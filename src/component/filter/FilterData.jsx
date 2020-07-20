@@ -29,14 +29,14 @@ class FilterData extends Component {
     }
 
     /* Will fetch autocomplete service.
-    * Added timeout setting so it will fetch the api after 2 seconds.*/
+    * Added timeout setting so it will fetch the api after 1 seconds.*/
     search = (fieldTypes, query) => {
         if (this.timeout)
             clearTimeout(this.timeout);
 
         this.timeout = setTimeout(() => {
             this.autoComplete(fieldTypes, query);
-        }, 2000);
+        }, 1000);
     };
 
     /* Fetching the Autocompletion API */
