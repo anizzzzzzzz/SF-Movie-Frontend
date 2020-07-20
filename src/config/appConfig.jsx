@@ -11,6 +11,6 @@ let ROOT_API = '';
 if(env === 3)
     ROOT_API='http://localhost:8080';
 else if(env === 4)
-    ROOT_API='http://192.168.1.86:8080';
+    ROOT_API='https://sf-movie-backend.herokuapp.com';
 
 export default ROOT_API;
