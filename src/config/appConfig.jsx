@@ -5,7 +5,7 @@ export const envType = {
     'PROD': 4
 };
 
-let env = envType.PROD;
+let env = envType.DEV;
 let ROOT_API = '';
 
 if(env === 3)
