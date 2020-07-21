@@ -1,68 +1,91 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# SF Movie
+This is the react-based user interface built for showing where movies have been filmed in San Francisco. It provides user interface for following features:
+* Autocompletion 
+* Filtering search 
+* Map 
+* Plotting the marker
 
-## Available Scripts
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine. 
 
-In the project directory, you can run:
+### Built With
+* **React Js**
+* **React Redux**
+* **Antd**
+* **Open Layer (For Map)**
 
-### `yarn start`
+### Installation
+```sh
+$ git clone https://github.com/anizzzzzzzz/SF-Movie-Frontend.git
+$ cd SF-Movie-Frontend/
+$ npm install
+$ npm start
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Installing Dependencies
+```sh
+$ npm install
+$ npm start
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+##### For Production
+``` 
+$ npm run-script build
+``` 
 
-### `yarn test`
+#### Deployed on :
+The application is deployed on [SF-Movie](https://sf-movie.000webhostapp.com/).
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Libraries Used:
+#### Open Layer
+[Open Layer](https://openlayers.org/) is an open Source JavaScript library for for displaying map data in web browsers as slippy maps. It has been 
+developed to further the use of geographic information of all kinds. It provides as API for building rich web-based 
+geographic applications similar to Google Maps and Bing Maps.
 
-### `yarn build`
+#### React Redux
+[Redux](https://react-redux.js.org/introduction/quick-start) is a state management tool. It lets your React components 
+read data from a Redux store, and dispatch actions to the store to update data.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Code Snippet
+FilterData.jsx
+```shell script
+/* Method for rendering SelectionFilter view preventing duplication of code. */
+    renderItems = () => {
+        const { allDatas, selectedDatas } = this.state;
+        const size = "large";
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+        const titles = allDatas[fieldTypes.TITLE] === undefined ? [] : allDatas[fieldTypes.TITLE];
+        const locations = allDatas[fieldTypes.LOCATIONS] === undefined ? [] : allDatas[fieldTypes.LOCATIONS];
+        const productionCompany = allDatas[fieldTypes.PRODUCTIONCOMPANY] === undefined ? [] : allDatas[fieldTypes.PRODUCTIONCOMPANY];
+        const writers = allDatas[fieldTypes.WRITER] === undefined ? [] : allDatas[fieldTypes.WRITER];
+        const actor1 = allDatas[fieldTypes.ACTOR1] === undefined ? [] : allDatas[fieldTypes.ACTOR1];
+        const actor2 = allDatas[fieldTypes.ACTOR2] === undefined ? [] : allDatas[fieldTypes.ACTOR2];
+        const actor3 = allDatas[fieldTypes.ACTOR3] === undefined ? [] : allDatas[fieldTypes.ACTOR3];
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        let renderingItems = [];
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.TITLE, "Movie Title", titles, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.LOCATIONS, "Street Name", locations, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.WRITER, "Writer", writers, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.ACTOR1, "Actor1 Name", actor1, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.PRODUCTIONCOMPANY, "Production Company", productionCompany, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.ACTOR2, "Actor2 Name", actor2, size));
+        renderingItems.push(this.getRenderingData(selectedDatas, fieldTypes.ACTOR3, "Actor3 Name", actor3, size));
 
-### `yarn eject`
+        if(this.state.seeAllFilters)
+            return renderingItems;
+        return renderingItems.slice(0, MAXITEMS);
+    };
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```shell script
+getRenderingData = (selectedDatas, fieldType, placeholder, optionDatas, size) => {
+        return (
+            <SelectionFilter key={placeholder} size={size} selectedDatas={selectedDatas} fieldTypes={fieldType}
+                             placeholder={placeholder} search={this.search} handleChange={this.handleChange}
+                             optionDatas={optionDatas}/>
+        );
+    };
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### My Profile
+[Anish Maharjan](https://www.linkedin.com/in/anish-maharjan-58a640149/)
